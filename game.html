@@ -7,21 +7,18 @@
 body{
     margin:0;
     background:#222;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
+    text-align:center;
+    font-family:Arial;
 }
 
-#score{
-    text-align:center;
+h1{
     color:white;
-    font-size:30px;
-    padding:10px;
 }
 
 #road{
     width:400px;
-    height:700px;
-    background:#555;
+    height:600px;
+    background:gray;
     margin:auto;
     position:relative;
     overflow:hidden;
@@ -29,141 +26,73 @@ body{
     border-right:5px solid white;
 }
 
-#player{
-    width:50px;
+#car{
+    width:60px;
     height:100px;
     background:red;
     position:absolute;
     bottom:20px;
-    left:175px;
+    left:170px;
     border-radius:10px;
 }
 
-.enemy{
-    width:50px;
-    height:100px;
-    background:blue;
-    position:absolute;
-    border-radius:10px;
-}
-
-.line{
-    width:10px;
-    height:100px;
-    background:white;
-    position:absolute;
-    left:195px;
+button{
+    margin:10px;
+    padding:15px 30px;
+    font-size:20px;
 }
 </style>
 
 </head>
 <body>
 
-<div id="score">Score: 0</div>
+<h1>🏎️ Racing Game</h1>
 
 <div id="road">
-    <div id="player"></div>
+    <div id="car"></div>
 </div>
+
+<br>
+
+<button onclick="moveLeft()">⬅ Left</button>
+<button onclick="moveRight()">Right ➡</button>
 
 <script>
 
-const road = document.getElementById("road");
-const player = document.getElementById("player");
-const scoreText = document.getElementById("score");
+let car = document.getElementById("car");
+let position = 170;
 
-let score = 0;
-let playerX = 175;
+function moveLeft(){
+    position -= 20;
 
-const keys = {
-    ArrowLeft:false,
-    ArrowRight:false
-};
-
-document.addEventListener("keydown",e=>{
-    if(e.key in keys) keys[e.key]=true;
-});
-
-document.addEventListener("keyup",e=>{
-    if(e.key in keys) keys[e.key]=false;
-});
-
-for(let i=0;i<6;i++){
-    let line=document.createElement("div");
-    line.className="line";
-    line.style.top=(i*120)+"px";
-    road.appendChild(line);
-}
-
-function createEnemy(x,y){
-    let enemy=document.createElement("div");
-    enemy.className="enemy";
-    enemy.style.left=x+"px";
-    enemy.style.top=y+"px";
-    road.appendChild(enemy);
-}
-
-createEnemy(50,-100);
-createEnemy(170,-300);
-createEnemy(290,-500);
-
-function gameLoop(){
-
-    if(keys.ArrowLeft && playerX>0){
-        playerX-=6;
+    if(position < 0){
+        position = 0;
     }
 
-    if(keys.ArrowRight && playerX<350){
-        playerX+=6;
-    }
-
-    player.style.left=playerX+"px";
-
-    document.querySelectorAll(".line").forEach(line=>{
-        let top=parseInt(line.style.top);
-        top+=8;
-
-        if(top>700){
-            top=-100;
-        }
-
-        line.style.top=top+"px";
-    });
-
-    document.querySelectorAll(".enemy").forEach(enemy=>{
-
-        let top=parseInt(enemy.style.top);
-        top+=5;
-
-        if(top>700){
-            top=-100;
-            enemy.style.left=
-            [50,170,290][Math.floor(Math.random()*3)];
-
-            score++;
-            scoreText.innerHTML="Score: "+score;
-        }
-
-        enemy.style.top=top+"px";
-
-        let p=player.getBoundingClientRect();
-        let e=enemy.getBoundingClientRect();
-
-        if(
-            p.left<e.right &&
-            p.right>e.left &&
-            p.top<e.bottom &&
-            p.bottom>e.top
-        ){
-            alert("Game Over! Score: "+score);
-            location.reload();
-        }
-
-    });
-
-    requestAnimationFrame(gameLoop);
+    car.style.left = position + "px";
 }
 
-gameLoop();
+function moveRight(){
+    position += 20;
+
+    if(position > 340){
+        position = 340;
+    }
+
+    car.style.left = position + "px";
+}
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "ArrowLeft"){
+        moveLeft();
+    }
+
+    if(e.key === "ArrowRight"){
+        moveRight();
+    }
+
+});
 
 </script>
 
