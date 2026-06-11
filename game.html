@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Abhishek Racing</title>
+<title>Abhishek Racing Game</title>
 
 <style>
 body{
     margin:0;
-    overflow:hidden;
     background:#222;
-    font-family:Arial;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
 }
 
 #score{
-    color:white;
     text-align:center;
+    color:white;
     font-size:30px;
     padding:10px;
 }
 
-#gameArea{
+#road{
     width:400px;
     height:700px;
     background:#555;
     margin:auto;
-    overflow:hidden;
     position:relative;
-    border-left:8px solid white;
-    border-right:8px solid white;
+    overflow:hidden;
+    border-left:5px solid white;
+    border-right:5px solid white;
 }
 
-.car{
+#player{
     width:50px;
-    height:90px;
+    height:100px;
+    background:red;
     position:absolute;
     bottom:20px;
     left:175px;
-    font-size:60px;
+    border-radius:10px;
 }
 
 .enemy{
     width:50px;
-    height:90px;
+    height:100px;
+    background:blue;
     position:absolute;
-    font-size:60px;
+    border-radius:10px;
 }
 
 .line{
@@ -53,159 +55,112 @@ body{
     left:195px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
 <div id="score">Score: 0</div>
 
-<div id="gameArea">
-<div id="player" class="car">🏎️</div>
+<div id="road">
+    <div id="player"></div>
 </div>
 
 <script>
 
-const gameArea =
-document.getElementById("gameArea");
-
-const player =
-document.getElementById("player");
-
-const scoreDisplay =
-document.getElementById("score");
+const road = document.getElementById("road");
+const player = document.getElementById("player");
+const scoreText = document.getElementById("score");
 
 let score = 0;
-let gameOver = false;
-
 let playerX = 175;
 
 const keys = {
-ArrowLeft:false,
-ArrowRight:false
+    ArrowLeft:false,
+    ArrowRight:false
 };
 
 document.addEventListener("keydown",e=>{
-if(keys.hasOwnProperty(e.key))
-keys[e.key]=true;
+    if(e.key in keys) keys[e.key]=true;
 });
 
 document.addEventListener("keyup",e=>{
-if(keys.hasOwnProperty(e.key))
-keys[e.key]=false;
+    if(e.key in keys) keys[e.key]=false;
 });
 
 for(let i=0;i<6;i++){
-let line=document.createElement("div");
-line.classList.add("line");
-line.style.top=(i*120)+"px";
-gameArea.appendChild(line);
+    let line=document.createElement("div");
+    line.className="line";
+    line.style.top=(i*120)+"px";
+    road.appendChild(line);
 }
 
-function createEnemy(){
-
-let enemy =
-document.createElement("div");
-
-enemy.classList.add("enemy");
-
-enemy.innerHTML="🚗";
-
-enemy.style.left=
-Math.floor(Math.random()*320)+"px";
-
-enemy.style.top="-100px";
-
-gameArea.appendChild(enemy);
+function createEnemy(x,y){
+    let enemy=document.createElement("div");
+    enemy.className="enemy";
+    enemy.style.left=x+"px";
+    enemy.style.top=y+"px";
+    road.appendChild(enemy);
 }
 
-for(let i=0;i<3;i++){
-createEnemy();
-}
-
-function moveLines(){
-
-document.querySelectorAll(".line")
-.forEach(line=>{
-
-let top=
-parseInt(line.style.top);
-
-top += 8;
-
-if(top>700)
-top=-100;
-
-line.style.top=top+"px";
-});
-}
-
-function moveEnemies(){
-
-document.querySelectorAll(".enemy")
-.forEach(enemy=>{
-
-let top=
-parseInt(enemy.style.top);
-
-top += 6;
-
-if(top>700){
-
-enemy.style.top="-100px";
-
-enemy.style.left=
-Math.floor(Math.random()*320)
-+"px";
-
-score++;
-
-scoreDisplay.innerHTML=
-"Score: "+score;
-}
-
-enemy.style.top=top+"px";
-
-let pRect=
-player.getBoundingClientRect();
-
-let eRect=
-enemy.getBoundingClientRect();
-
-if(
-pRect.left<eRect.right &&
-pRect.right>eRect.left &&
-pRect.top<eRect.bottom &&
-pRect.bottom>eRect.top
-){
-gameOver=true;
-alert(
-"Game Over! Score: "
-+score
-);
-location.reload();
-}
-});
-}
+createEnemy(50,-100);
+createEnemy(170,-300);
+createEnemy(290,-500);
 
 function gameLoop(){
 
-if(gameOver) return;
+    if(keys.ArrowLeft && playerX>0){
+        playerX-=6;
+    }
 
-if(keys.ArrowLeft &&
-playerX>0)
-playerX-=6;
+    if(keys.ArrowRight && playerX<350){
+        playerX+=6;
+    }
 
-if(keys.ArrowRight &&
-playerX<340)
-playerX+=6;
+    player.style.left=playerX+"px";
 
-player.style.left=
-playerX+"px";
+    document.querySelectorAll(".line").forEach(line=>{
+        let top=parseInt(line.style.top);
+        top+=8;
 
-moveLines();
-moveEnemies();
+        if(top>700){
+            top=-100;
+        }
 
-requestAnimationFrame(gameLoop);
+        line.style.top=top+"px";
+    });
+
+    document.querySelectorAll(".enemy").forEach(enemy=>{
+
+        let top=parseInt(enemy.style.top);
+        top+=5;
+
+        if(top>700){
+            top=-100;
+            enemy.style.left=
+            [50,170,290][Math.floor(Math.random()*3)];
+
+            score++;
+            scoreText.innerHTML="Score: "+score;
+        }
+
+        enemy.style.top=top+"px";
+
+        let p=player.getBoundingClientRect();
+        let e=enemy.getBoundingClientRect();
+
+        if(
+            p.left<e.right &&
+            p.right>e.left &&
+            p.top<e.bottom &&
+            p.bottom>e.top
+        ){
+            alert("Game Over! Score: "+score);
+            location.reload();
+        }
+
+    });
+
+    requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
