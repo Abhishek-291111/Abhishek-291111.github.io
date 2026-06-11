@@ -4,150 +4,86 @@
 <title>Abhishek Games</title>
 
 <style>
-*{
+body{
     margin:0;
-    padding:0;
-    box-sizing:border-box;
+    font-family:Arial;
+    background:#111827;
+    color:white;
 }
 
-body{
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#0f172a,#1e293b);
+nav{
+    background:black;
+    padding:15px;
+    text-align:center;
+}
+
+nav a{
     color:white;
+    text-decoration:none;
+    margin:20px;
+    font-weight:bold;
 }
 
 header{
     text-align:center;
-    padding:60px 20px;
-}
-
-header h1{
-    font-size:60px;
-}
-
-header p{
-    margin-top:10px;
-    color:#cbd5e1;
-}
-
-.search{
-    text-align:center;
-    margin:20px;
-}
-
-.search input{
-    width:350px;
-    max-width:90%;
-    padding:12px;
-    border:none;
-    border-radius:30px;
-    font-size:16px;
-}
-
-.hero{
-    text-align:center;
-    padding:40px;
-}
-
-.hero button{
-    padding:15px 30px;
-    border:none;
-    border-radius:30px;
-    font-size:18px;
-    cursor:pointer;
+    padding:50px;
 }
 
 .games{
     display:flex;
-    flex-wrap:wrap;
     justify-content:center;
-    gap:25px;
-    padding:30px;
+    gap:20px;
+    flex-wrap:wrap;
 }
 
 .card{
-    width:280px;
-    background:#1e293b;
-    border-radius:20px;
+    width:250px;
+    background:#1f2937;
+    border-radius:15px;
     overflow:hidden;
-    transition:0.3s;
-    box-shadow:0 5px 15px rgba(0,0,0,.4);
-}
-
-.card:hover{
-    transform:translateY(-10px);
 }
 
 .card img{
     width:100%;
-    height:180px;
-    object-fit:cover;
+    height:150px;
 }
 
 .card a{
     display:block;
-    padding:15px;
     color:white;
     text-decoration:none;
     text-align:center;
-    font-weight:bold;
-}
-
-footer{
-    text-align:center;
-    padding:25px;
-    background:#0f172a;
-    margin-top:30px;
+    padding:15px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
+<nav>
+<a href="index.html">Home</a>
+<a href="game.html">Racing</a>
+<a href="zombie.html">Zombie</a>
+</nav>
+
 <header>
-    <h1>🎮 Abhishek Games</h1>
-    <p>Play Free Browser Games Anytime</p>
+<h1>🎮 ABHISHEK GAMES</h1>
+<p>Play Free Games Online</p>
 </header>
-
-<div class="search">
-    <input type="text" placeholder="Search games...">
-</div>
-
-<div class="hero">
-    <h2>🔥 Featured Game</h2>
-    <br>
-    <a href="game.html">
-        <button>Play Racing Game</button>
-    </a>
-</div>
 
 <div class="games">
 
-    <div class="card">
-        <img src="https://picsum.photos/500/300?1">
-        <a href="game.html">🏎️ Racing Game</a>
-    </div>
-
-    <div class="card">
-        <img src="https://picsum.photos/500/300?2">
-        <a href="zombie.html">🧟 Zombie Shooter</a>
-    </div>
-
-    <div class="card">
-        <img src="https://picsum.photos/500/300?3">
-        <a href="#">⚔️ Action Game</a>
-    </div>
-
-    <div class="card">
-        <img src="https://picsum.photos/500/300?4">
-        <a href="#">🧩 Puzzle Game</a>
-    </div>
-
+<div class="card">
+<img src="https://picsum.photos/250/150?1">
+<a href="game.html">🏎️ Racing Game</a>
 </div>
 
-<footer>
-    © 2026 Abhishek Games
-</footer>
+<div class="card">
+<img src="https://picsum.photos/250/150?2">
+<a href="zombie.html">🧟 Zombie Shooter</a>
+</div>
+
+</div>
 
 </body>
 </html>
