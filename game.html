@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Racing Game</title>
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:#222;
+}
+#game{
+    width:400px;
+    height:600px;
+    background:gray;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+    border:5px solid white;
+}
+.line{
+    width:10px;
+    height:100px;
+    background:white;
+    position:absolute;
+    left:195px;
+}
+#car{
+    width:50px;
+    height:90px;
+    background:red;
+    position:absolute;
+    bottom:20px;
+    left:175px;
+    border-radius:10px;
+}
+.enemy{
+    width:50px;
+    height:90px;
+    background:blue;
+    position:absolute;
+    top:-100px;
+    border-radius:10px;
+}
+#score{
+    color:white;
+    text-align:center;
+    font-size:24px;
+    margin:10px;
+}
+</style>
+</head>
+<body>
+
+<div id="score">Score: 0</div>
+
+<div id="game">
+    <div id="car"></div>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const car = document.getElementById("car");
+const scoreDisplay = document.getElementById("score");
+
+let carLeft = 175;
+let score = 0;
+
+document.addEventListener("keydown", (e)=>{
+    if(e.key==="ArrowLeft" && carLeft>0){
+        carLeft -= 25;
+    }
+    if(e.key==="ArrowRight" && carLeft<350){
+        carLeft += 25;
+    }
+    car.style.left = carLeft + "px";
+});
+
+for(let i=0;i<5;i++){
+    let line=document.createElement("div");
+    line.classList.add("line");
+    line.style.top=(i*150)+"px";
+    game.appendChild(line);
+}
+
+let enemy=document.createElement("div");
+enemy.classList.add("enemy");
+enemy.style.left=Math.floor(Math.random()*350)+"px";
+game.appendChild(enemy);
+
+function move(){
+    document.querySelectorAll(".line").forEach(line=>{
+        let top=parseInt(line.style.top);
+        top+=5;
+        if(top>600) top=-100;
+        line.style.top=top+"px";
+    });
+
+    let enemyTop=enemy.offsetTop+6;
+    enemy.style.top=enemyTop+"px";
+
+    if(enemyTop>600){
+        enemy.style.top="-100px";
+        enemy.style.left=Math.floor(Math.random()*350)+"px";
+        score++;
+        scoreDisplay.innerText="Score: "+score;
+    }
+
+    let carRect=car.getBoundingClientRect();
+    let enemyRect=enemy.getBoundingClientRect();
+
+    if(
+        carRect.left<enemyRect.right &&
+        carRect.right>enemyRect.left &&
+        carRect.top<enemyRect.bottom &&
+        carRect.bottom>enemyRect.top
+    ){
+        alert("Game Over! Score: "+score);
+        location.reload();
+    }
+
+    requestAnimationFrame(move);
+}
+move();
+</script>
+
+</body>
+</html>
